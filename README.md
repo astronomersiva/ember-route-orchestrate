@@ -1,26 +1,37 @@
 # ember-route-orchestrate
 
-This README outlines the details of collaborating on this Ember addon.
+ember-route-orchestrate allows you to schedule actions to run after a hook in another route.
 
 ## Installation
 
-* `git clone <repository-url>` this repository
-* `cd ember-route-orchestrate`
-* `npm install`
+* `npm install ember-route-orchestrate`
 
-## Running
+## Usage
 
-* `ember serve`
-* Visit your app at [http://localhost:4200](http://localhost:4200).
+**Please note that this was developed for an experimental idea that I have been working on. This addon has very limited genuine use cases that do not go against DDAU.**
 
-## Running Tests
+* Extend the target route from OrchestratedRoute. 
+```javascript
+import OrchestratedRoute from 'ember-route-orchestrate/routes/orchestrated';
 
-* `npm test` (Runs `ember try:each` to test your addon against multiple Ember versions)
-* `ember test`
-* `ember test --server`
+export default OrchestratedRoute.extend({
+});
+```
 
-## Building
+* This addon injects an `orchestrator` service with a method `callAction` into all routes. Schedule the action on the target route from the source route using `callAction`.
+```javascript
+  this.get('orchestrator').callAction('actionName', {
+      hook: 'anyOfEmberRouteHooks',
+      route: 'targetRouteName',
+      // action `actionName` will be called on 3 route visits.
+      // if times is not provided, default value of 1 will be applied.
+      // you can also set the value of times as 'forever'.
+      times: 3,
+      // optional params for the action.
+      params: { hello: 'world' }
+    });
+```
 
-* `ember build`
+## License
 
-For more information on using ember-cli, visit [https://ember-cli.com/](https://ember-cli.com/).
+MIT - [Sivasubramanyam A](https://sivasubramanyam.me)
